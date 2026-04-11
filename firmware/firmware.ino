@@ -1,58 +1,46 @@
+// Felipe : 11/04 
+// Projeto de Hardware da UEPG *Trabalhando como calouro pros parceiro do quinto ano;
+// Tem comentário em tudo pra eu lembrar o que fazer, tenho TDAH :)
+
 #include <WiFi.h>
-#include <HTTPClient.h>
 
-// Configurações da sua rede
-const char* ssid = "Ap17";
-const char* password = "HsxFs7_J3W";
-
-// Endereço do seu Backend
-const char* serverPath = "http://192.168.1.5:3001/api/bacia/proxima";
-
-const int pinoBotao = 12; // Pino solicitado
-bool ultimoEstadoBotao = HIGH;
+const char* /* não sei pq que tem o asteristico, tenho que descobrir isso */ ssid = "NOMEDAREDE";
+const char* senha = "SenhaDaRede";
+int PortaBotao = 16;
+int botaoPress = 0;
 
 void setup() {
   Serial.begin(115200);
-  pinMode(pinoBotao, INPUT_PULLUP); // Usa o resistor interno
+  //Conecta a internet
+  WiFi.begin(ssid,senha); // Tenta conctar
 
-  WiFi.begin(ssid, password);
-  Serial.print("Conectando ao Wi-Fi");
-  while (WiFi.status() != WL_CONNECTED) {
+  while (WiFi.status() != WL_CONNECTED()){ // Enquanto não ta conectado
     delay(500);
-    Serial.print(".");
+    Serial.println("To conectano, calma, eu trabalho pior sobre pressão");
   }
-  Serial.println("\nWi-Fi Conectado!");
-}
+  Serial.println("Conectei !!! :D");
 
-void trocarBacia() {
-  if (WiFi.status() == WL_CONNECTED) {
-    HTTPClient http;
-    http.begin(serverPath);
-    
-    // Envia um POST vazio (o backend resolve qual é a bacia)
-    int httpResponseCode = http.POST("");
-
-    if (httpResponseCode > 0) {
-      Serial.print("Sucesso! Status: ");
-      Serial.println(httpResponseCode);
-    } else {
-      Serial.print("Erro na requisição: ");
-      Serial.println(httpResponseCode);
-    }
-    http.end();
-  }
+  pinMode(PortaBotao, INPUT_PULLUP); // Declara a porta do botão
 }
 
 void loop() {
-  bool estadoAtual = digitalRead(pinoBotao);
-
-  // Detecta quando o botão é pressionado (de HIGH para LOW)
-  if (ultimoEstadoBotao == HIGH && estadoAtual == LOW) {
-    delay(50); // Debounce simples para evitar falsos cliques
-    if (digitalRead(pinoBotao) == LOW) {
-      Serial.println("Botão pressionado! Trocando bacia...");
-      trocarBacia();
+  //Reconectar o Wifi se tiver dado merda 
+  if (WiFi.status() != WL_CONNECTED()){
+    WiFi.begin(ssid,senha);  // Não sei se é assim que reconecta XD pesquisa depois
+    while (WiFi.status() != WL_CONNECTED()){ // Enquanto não ta conectado
+      delay(500);
+      Serial.println("To conectano, calma, eu trabalho pior sobre pressão");
     }
+    Serial.println("Conectei !!! :D");
   }
-  ultimoEstadoBotao = estadoAtual;
+  //ler o botão
+  botaoPress = digitalRead(PortaBotao);
+
+  if (botaoPress == LOW){
+    Serial.println("APERTO Ó, TA APERTADO"); // (Inserir o Código de verdade aqui depois)
+    delay(200); //Debouce improvisado por enquanto
+  }
+
+
+  //Conhectar o MQTT
 }
