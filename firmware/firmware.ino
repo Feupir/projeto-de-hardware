@@ -1,12 +1,14 @@
 // Felipe : 11/04 
 // Projeto de Hardware da UEPG *Trabalhando como calouro pros parceiro do quinto ano;
 // Tem comentário em tudo pra eu lembrar o que fazer, tenho TDAH :)
+// Atualização só para as correções que o James comentou, continuarei escrevendo o codigo na segunda a noite.
+
 
 #include <WiFi.h>
+#define PortaBotao 16
 
-const char* /* não sei pq que tem o asteristico, tenho que descobrir isso */ ssid = "NOMEDAREDE";
+const char* ssid = "NOMEDAREDE";
 const char* senha = "SenhaDaRede";
-int PortaBotao = 16;
 int botaoPress = 0;
 
 void setup() {
@@ -25,9 +27,9 @@ void setup() {
 
 void loop() {
   //Reconectar o Wifi se tiver dado merda 
-  if (WiFi.status() != WL_CONNECTED()){
+  if (WiFi.status() != WL_CONNECTED){
     WiFi.begin(ssid,senha);  // Não sei se é assim que reconecta XD pesquisa depois
-    while (WiFi.status() != WL_CONNECTED()){ // Enquanto não ta conectado
+    while (WiFi.status() != WL_CONNECTED){ // Enquanto não ta conectado
       delay(500);
       Serial.println("To conectano, calma, eu trabalho pior sobre pressão");
     }
@@ -40,7 +42,5 @@ void loop() {
     Serial.println("APERTO Ó, TA APERTADO"); // (Inserir o Código de verdade aqui depois)
     delay(200); //Debouce improvisado por enquanto
   }
-
-
   //Conhectar o MQTT
 }
