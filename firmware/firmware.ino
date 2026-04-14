@@ -3,17 +3,18 @@
 // Tem comentário em tudo pra eu lembrar o que fazer, tenho TDAH :)
 // Atualização só para as correções que o James comentou, continuarei escrevendo o codigo na segunda a noite.
 
-
+#include <PubSubClient.h>
 #include <WiFi.h>
 #define PortaBotao 16
-
+  
 const char* ssid = "NOMEDAREDE";
 const char* senha = "SenhaDaRede";
+const char* mqtt_server "Insira o IP aqui";
+const int mqtt_port = 1883;
+const char* topicoUnico = "bacias/comando/proxima"
 int botaoPress = 0;
 
-void setup() {
-  Serial.begin(115200);
-  //Conecta a internet
+void conectarWiFi(){
   WiFi.begin(ssid,senha); // Tenta conctar
 
   while (WiFi.status() != WL_CONNECTED()){ // Enquanto não ta conectado
@@ -21,6 +22,30 @@ void setup() {
     Serial.println("To conectano, calma, eu trabalho pior sobre pressão");
   }
   Serial.println("Conectei !!! :D");
+  Serial.println(WiFi_localIP();)
+}
+void mqttReconect(){
+  while (!client.connected()){
+    Serial.println("Conectando o MQTT");
+    String clientId = "ENGEASIER_MQTT";
+    clientId += String(random(0xffff), HEX);
+    if (client.connect(clientID.c_str())){
+      Serial.println("Conectado ( eu acho )")
+      client.subscribe(topicoUnico);
+    }
+    else {
+      Serial.print("Falha ao conectar = ");
+      Serial.print(client.state());
+      Serial.println("Tentando reconecção em 5 segundos");
+      delay(5000);
+    }
+  }
+}
+
+void setup() {
+  Serial.begin(115200);
+  conectarWiFi();
+  
 
   pinMode(PortaBotao, INPUT_PULLUP); // Declara a porta do botão
 }
@@ -39,7 +64,7 @@ void loop() {
   botaoPress = digitalRead(PortaBotao);
 
   if (botaoPress == LOW){
-    Serial.println("APERTO Ó, TA APERTADO"); // (Inserir o Código de verdade aqui depois)
+    client.publich(topico, 1);
     delay(200); //Debouce improvisado por enquanto
   }
   //Conhectar o MQTT
