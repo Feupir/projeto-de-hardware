@@ -49,16 +49,16 @@ void handleGesture() {
     if ( apds.isGestureAvailable() ) {
     switch ( apds.readGesture() ) {
       case DIR_UP:
-        client.publish(topico, X) // X para o valor de abrir detalhes técnicos.
+        client.publish(topico, "indo") // X para o valor de abrir detalhes técnicos.
         break;
       case DIR_DOWN:
-        client.publish(topico, X) // X para o valor de voltar para o inicio.
+        client.publish(topico, "home") // X para o valor de voltar para o inicio.
         break;
       case DIR_LEFT:
-        client.publish(topico, X) // X para o valor de voltar uma Bacia.
+        client.publish(topico, "anterior") // X para o valor de voltar uma Bacia.
         break;
       case DIR_RIGHT:
-        client.publish(topico, X) // X para o valor de ir pra próxima bacia.
+        client.publish(topico, "proximo") // X para o valor de ir pra próxima bacia.
         break;
       default:
         Serial.println("NONE");
