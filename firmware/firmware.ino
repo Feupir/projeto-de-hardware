@@ -2,21 +2,31 @@
 // Projeto de Hardware da UEPG *Trabalhando como calouro pros parceiro do quinto ano;
 // Tem comentário em tudo pra eu lembrar o que fazer, tenho TDAH :)
 
+//Biblioteca do MQTT
 #include <PubSubClient.h>
+
+//Biblioteca de Wifi
 #include <WiFi.h>
+
+//Bibliotecas e porta do sensor de gesto
 #include <SparkFun_APDS9960.h>
 #include <Wire.h>
-
-
 #define PinoAPDS 2
 
-const char* ssid = "NOMEDAREDE";
-const char* senha = "SenhaDaRede";
+//Infos do MQTT
 const char* mqtt_server "Insira o IP aqui";
 const int mqtt_port = 1883;
 const char* topicoUnico = "bacias/comando/proxima" ;
+
+//Infos do WIFI
+const char* ssid = "NOMEDAREDE";
+const char* senha = "SenhaDaRede";
+
+//Infos do sensor de gesto
 sensorGesto apds = SparkFun_APDS9960();
 int isr_flag = 0; // Variavel da interrupção do sensor de gesto.
+
+
 
 void conectarWiFi() {
   WiFi.begin(ssid, senha);  // Tenta conctar
@@ -28,6 +38,9 @@ void conectarWiFi() {
   Serial.println("Conectei !!! :D");
   Serial.println(WiFi_localIP();)
 }
+
+
+
 void mqttReconect() {
   while (!client.connected()) {
     Serial.println("Conectando o MQTT");
